@@ -4,3 +4,14 @@ __pycache__/
 .env
 venv
 */pycach
+*.pyc
+
+
+.zen/
+mlruns/
+mlflow.db
+
+.ipynb_checkpoints/
+.DS_Store
+Thumbs.db
+
