@@ -1,3 +1,7 @@
-pytest
-ruff
-black
+pandas
+numpy
+scikit-learn
+mlflow
+zenml
+dvc
+dvc-s3
