@@ -32,13 +32,17 @@ class MissingValuesStrategy(DataStrategy):
 
 
 class EncodingStrategy(DataStrategy):
-    def handle_data(self, data: pd.DataFrame) -> pd.DataFrame:
+    def __init__(self):
+        self.encoders = {} # Pour stocker un encodeur par colonne
+
+    def handle_data(self, data: pd.DataFrame) -> Tuple[pd.DataFrame, dict]:
         try:
             df = data.copy()
             for col in df.select_dtypes(include="object"):
-                    le = LabelEncoder()
-                    df[col] = le.fit_transform(df[col].astype(str))
-            return df
+                le = LabelEncoder()
+                df[col] = le.fit_transform(df[col].astype(str))
+                self.encoders[col] = le # On garde l'encodeur
+            return df, self.encoders # On retourne les données ET les encodeurs
         except Exception as e:
             logging.error(f"Encoding failed: {e}")
             raise

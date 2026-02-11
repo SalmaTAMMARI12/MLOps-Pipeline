@@ -1,13 +1,19 @@
-import logging
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
+import logging
 
 class TrainingStrategy:
-    """Train a simple baseline model (good for small datasets)."""
     def train(self, X_train, y_train):
-        try:
-            model = LogisticRegression(max_iter=1000)
-            model.fit(X_train, y_train)
-            return model
-        except Exception as e:
-            logging.error(f"Training failed: {e}")
-            raise
+        raise NotImplementedError("Chaque stratégie doit implémenter train()")
+
+class LogisticRegressionStrategy(TrainingStrategy):
+    def train(self, X_train, y_train):
+        model = LogisticRegression(max_iter=1000)
+        model.fit(X_train, y_train)
+        return model
+
+class RandomForestStrategy(TrainingStrategy):
+    def train(self, X_train, y_train):
+        model = RandomForestClassifier(n_estimators=100)
+        model.fit(X_train, y_train)
+        return model

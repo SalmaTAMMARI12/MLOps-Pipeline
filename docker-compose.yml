@@ -1,0 +1,28 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: app/Dockerfile.api
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./app:/app/app
+      - ./src:/app/src
+      - ./artifacts:/app/artifacts
+    environment:
+      - ARTIFACTS_DIR=/app/artifacts
+      - MODEL_PATH=/app/artifacts/model.joblib
+      - SCALER_PATH=/app/artifacts/scaler.joblib
+      - ENCODERS_PATH=/app/artifacts/encoders.joblib
+
+  dashboard:
+    build:
+      context: .
+      dockerfile: app/Dockerfile.dashboard
+    ports:
+      - "8501:8501"
+    depends_on:
+      - api
+    environment:
+       - API_BASE_URL=http://api:8000
+

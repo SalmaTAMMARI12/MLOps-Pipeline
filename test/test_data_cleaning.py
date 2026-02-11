@@ -16,10 +16,7 @@ def test_missing_values_strategy_sets_none_for_ai_fields_when_uses_ai_no():
 
     out = MissingValuesStrategy().handle_data(df)
 
-    # uses_ai reste en format "Yes"/"No" après MissingValuesStrategy
     assert set(out["uses_ai"].unique()).issubset({"No", "Yes"})
-
-    # Pour uses_ai == "No", les champs AI doivent être "None"
     mask = out["uses_ai"] == "No"
     assert (out.loc[mask, "ai_tools_used"] == "None").all()
     assert (out.loc[mask, "purpose_of_ai"] == "None").all()

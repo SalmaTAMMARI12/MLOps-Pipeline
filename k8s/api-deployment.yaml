@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api
+  namespace: mlops
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: api
+  template:
+    metadata:
+      labels:
+        app: api
+    spec:
+      containers:
+        - name: api
+          image: mlops-api:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8000
+          env:
+            - name: ARTIFACTS_DIR
+              value: /app/artifacts
+            - name: MODEL_PATH
+              value: /app/artifacts/model.joblib
+            - name: SCALER_PATH
+              value: /app/artifacts/scaler.joblib
+            - name: ENCODERS_PATH
+              value: /app/artifacts/encoders.joblib
+          # Pour commencer simple: on met les artifacts dans l'image API (recommandé pour k8s)
+          # Sinon on fera un PVC après.
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 15
+            periodSeconds: 10
