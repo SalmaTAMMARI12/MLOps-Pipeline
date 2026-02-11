@@ -18,7 +18,8 @@ def test_split_and_scale_returns_expected_shapes_and_no_target_in_X():
     })
 
     splitter = TrainTestSplitWithScaling(test_size=0.4, random_state=42)
-    X_train, X_test, y_train, y_test = splitter.split(df)
+    
+    X_train, X_test, y_train, y_test, *_ = splitter.split(df)
 
     total_samples = len(df)
 
