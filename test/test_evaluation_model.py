@@ -1,8 +1,9 @@
 import pandas as pd
-from src.training_model import TrainingStrategy
+import pytest
+from src.training_model import LogisticRegressionStrategy, RandomForestStrategy
 from src.evaluation_model import EvaluationStrategy
-
-def test_evaluation_returns_expected_metrics():
+@pytest.mark.parametrize("strategy_class", [LogisticRegressionStrategy, RandomForestStrategy])
+def test_evaluation_returns_expected_metrics(strategy_class):
     X = pd.DataFrame({
         "age": [0.1, -0.3, 1.2, -1.0],
         "study_hours_per_day": [0.2, -0.2, 1.0, -1.0],
@@ -16,8 +17,7 @@ def test_evaluation_returns_expected_metrics():
         "screen_overload": [0, 1, 0, 0],
     })
     y = pd.Series([0, 1, 0, 1])
-
-    model = TrainingStrategy().train(X, y)
+    model = strategy_class().train(X, y)
     metrics = EvaluationStrategy().evaluate(model, X, y)
 
     assert "accuracy" in metrics

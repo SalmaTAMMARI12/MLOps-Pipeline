@@ -4,4 +4,12 @@ scikit-learn
 mlflow
 zenml
 dvc
+streamlit
 dvc-s3
+fastapi
+uvicorn
+shap
+matplotlib
+pillow
+requests
+streamlit

@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dashboard
+  namespace: mlops
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dashboard
+  template:
+    metadata:
+      labels:
+        app: dashboard
+    spec:
+      containers:
+        - name: dashboard
+          image: mlops-dashboard:latest
+          imagePullPolicy: Never
+
+          ports:
+            - containerPort: 8501
+          env:
+            - name: API_BASE_URL
+              value: http://api.mlops.svc.cluster.local:8000

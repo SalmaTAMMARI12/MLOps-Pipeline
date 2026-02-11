@@ -1,7 +1,8 @@
 import pandas as pd
-from src.training_model import TrainingStrategy
-
-def test_training_returns_fitted_model():
+import pytest
+from src.training_model import LogisticRegressionStrategy, RandomForestStrategy
+@pytest.fixture
+def sample_data():
     X_train = pd.DataFrame({
         "age": [0.1, -0.3, 1.2, -1.0],
         "study_hours_per_day": [0.2, -0.2, 1.0, -1.0],
@@ -15,10 +16,22 @@ def test_training_returns_fitted_model():
         "screen_overload": [0, 1, 0, 0],
     })
     y_train = pd.Series([0, 1, 0, 1])
+    return X_train, y_train
 
-    model = TrainingStrategy().train(X_train, y_train)
+def test_logistic_regression_strategy(sample_data):
+    X_train, y_train = sample_data
+    strategy = LogisticRegressionStrategy()
+    model = strategy.train(X_train, y_train)
+    
+    assert hasattr(model, "predict")
+    preds = model.predict(X_train)
+    assert len(preds) == len(X_train)
 
-    # Model should be fitted and usable
+def test_random_forest_strategy(sample_data):
+    X_train, y_train = sample_data
+    strategy = RandomForestStrategy()
+    model = strategy.train(X_train, y_train)
+    
     assert hasattr(model, "predict")
     preds = model.predict(X_train)
     assert len(preds) == len(X_train)
